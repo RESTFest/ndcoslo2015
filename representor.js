@@ -11,6 +11,7 @@
 // load representors
 var json = require('./representors/json.js');
 var cj = require('./representors/cj.js');
+var uber = require('./representors/uber.js');
 var haljson = require('./representors/haljson.js');
 var repjson = require('./representors/repjson.js');
 var siren = require('./representors/siren.js');
@@ -36,6 +37,9 @@ function processDoc(object, mimeType, root) {
       break;
     case "application/vnd.collection+json":
       doc = cj(object, root);
+      break;
+    case 'application/vnd.uber+json':
+      doc = uber(object, root);
       break;
     case "application/vnd.hal+json":
       doc = haljson(object, root);
