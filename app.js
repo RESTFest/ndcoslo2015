@@ -20,18 +20,21 @@ var home = require('./connectors/home.js');
 var utils = require('./connectors/utils.js');
 
 // shared vars
-var root = '';
-var port = (process.env.PORT || 8181);
-var jsonType = 'application/json';
-var cjType = 'application/vnd.collection+json';
-var haljsonType = 'application/vnd.hal+json';
-var repjsonType = 'application/representor+json';
-var sirenType = 'application/vnd.siren+json';
-var htmlType = "text/html";
-var jsonUrlType = "application/json;profile=urls";
+var root         = '';
+var port         = (process.env.PORT || 8181);
+
+var jsonType     = 'application/json';
+var cjType       = 'application/vnd.collection+json';
+var uberType     = 'application/vnd.uber+json';
+var haljsonType  = 'application/vnd.hal+json';
+var repjsonType  = 'application/representor+json';
+var sirenType    = 'application/vnd.siren+json';
+var htmlType     = "text/html";
+var jsonUrlType  = "application/json;profile=urls";
 var jsonFormType = "application/json;profile=forms";
-var csType = '';
-var csAccept = '';
+
+var csType       = '';
+var csAccept     = '';
 
 // routing rules
 var reFile = new RegExp('^\/files\/.*','i');
