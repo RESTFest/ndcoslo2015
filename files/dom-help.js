@@ -31,9 +31,10 @@ function domHelp() {
     var p, lbl, inp;
 
     p = node("p");
+    p.className = "ui labeled input";
     lbl = node("label");
     inp = node("input");
-    lbl.className = "data";
+    lbl.className = "data ui label";
     lbl.innerHTML = args.prompt||"";
     inp.name = args.name||"";
     inp.className = "value";
@@ -55,7 +56,7 @@ function domHelp() {
     p = node("p");
     p.className = args.className||"";
     s1 = node('span');
-    s1.className = "prompt";
+    s1.className = "prompt ui label";
     s1.innerHTML = args.text||"";;
     s2 = node("span");
     s2.className = "value";

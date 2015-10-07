@@ -10,14 +10,21 @@
   -->
   <head>
     <title>Cj</title>
-    <link href="cj-client.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.4/semantic.min.css" rel="stylesheet" />
+    <!--link href="cj-client.css" rel="stylesheet" /-->
   </head>
   <body>
-    <h1 id="title"></h1>
+    <h1 id="title" class="ui page header"></h1>
     <div id="links"></div>
-    <div id="items"></div>
-    <div id="edit" class="display:none;"></div>
-    <div id="queries"></div>
+    <div class="ui two column grid" style="margin-top: 2em">
+      <div class="column">
+        <div id="items" class="ui segments"></div>
+        <div id="edit" class="display:none;"></div>
+      </div>
+      <div class="column">
+        <div id="queries"></div>
+      </div>
+    </div>
     <div id="template"></div>
     <div id="error"></div>
     <div>

@@ -75,7 +75,8 @@ function cj() {
     d.clear(elm);
     if(g.cj.collection.links) {
       coll = g.cj.collection.links;
-      ul = d.node("ul");
+      ul = d.node("div");
+      ul.className = "ui blue fixed top menu";
       ul.onclick = httpGet;
       
       for(var link of coll) {
@@ -90,6 +91,7 @@ function cj() {
         
         // render embedded images, if asked
         li = d.node("li");
+        li.className = "item";
         if(isImage(link)===true) {
           img = d.image({href:link.href,className:link.rel});
           d.push(img, li);
@@ -116,34 +118,37 @@ function cj() {
     d.clear(elm);
     if(g.cj.collection.items) {
       coll = g.cj.collection.items;
-      ul = d.node("ul");
+      ul = d.node("div");
 
       for(var item of coll) {
-        li = d.node("li");
+        //li = d.node("li");
         dl = d.node("dl");
+        dl.className = "ui segment";
         dt = d.node("dt");
+        dt.className = "ui mini buttons";
         
         // item link
-        a1 = d.anchor({href:item.href,rel:item.rel,className:"item link",text:item.rel});
+        a1 = d.anchor({href:item.href,rel:item.rel,className:"item link ui basic blue button",text:item.rel});
         a1.onclick = httpGet;
         d.push(a1,dt);
         
         // edit link
         if(isReadOnly(item)===false && hasTemplate(g.cj.collection)===true) {
-          a2 = d.anchor({href:item.href,rel:"edit",className:"item action",text:"Edit"});
+          a2 = d.anchor({href:item.href,rel:"edit",className:"item action ui positive button",text:"Edit"});
           a2.onclick = cjEdit;
           d.push(a2, dt);
         }
 
         // delete link
         if(isReadOnly(item)===false) {
-          a3 = d.anchor({href:item.href,className:"item action",rel:"delete",text:"Delete"});
+          a3 = d.anchor({href:item.href,className:"item action ui negative button",rel:"delete",text:"Delete"});
           a3.onclick = httpDelete;
           d.push(a3,dt);
         }
         d.push(dt,dl);
         
         dd = d.node("dd");
+        dd.className = "ui list";
         for(var data of item.data) {
           p = d.data({className:"item "+data.name,text:data.prompt+"&nbsp;",value:data.value+"&nbsp;"});
           d.push(p,dd);
@@ -167,10 +172,11 @@ function cj() {
           }
         }
         d.push(dd,dl);
-        d.push(dl,li);
-        d.push(li,ul);
+        //d.push(dl,li);
+        //d.push(li,ul);
+        d.push(dl, elm);
       }
-      d.push(ul,elm);
+      //d.push(ul,elm);
     }
   }
   
@@ -183,18 +189,22 @@ function cj() {
     elm = d.find("queries");
     d.clear(elm);
     if(g.cj.collection.queries) {
-      ul = d.node("ul");
+      ul = d.node("div");
+      ul.className = "ui list";
       coll = g.cj.collection.queries;
       for(var query of coll) {
         li = d.node("li");
+        li.className = "item";
         form = d.node("form");
         form.action = query.href;
         form.className = query.rel;
         form.method = "get";
         form.onsubmit = httpQuery;
-        fs = d.node("fieldset");
-        lg = d.node("legend");
+        fs = d.node("div");
+        fs.className = "ui form";
+        lg = d.node("div");
         lg.innerHTML = query.prompt + "&nbsp;";
+        lg.className = "ui dividing header";
         d.push(lg,fs);
         for(var data of query.data) {
           p = d.input({prompt:data.prompt,name:data.name,value:data.value});
@@ -203,6 +213,7 @@ function cj() {
         p = d.node("p");
         inp = d.node("input");
         inp.type = "submit";
+        inp.className = "ui mini submit button";
         d.push(inp,p);
         d.push(p,fs);
         d.push(fs,form);
