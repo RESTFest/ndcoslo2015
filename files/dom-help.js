@@ -31,10 +31,10 @@ function domHelp() {
     var p, lbl, inp;
 
     p = node("p");
-    p.className = "ui labeled input";
+    p.className = "inline field";
     lbl = node("label");
     inp = node("input");
-    lbl.className = "data ui label";
+    lbl.className = "data";
     lbl.innerHTML = args.prompt||"";
     inp.name = args.name||"";
     inp.className = "value";

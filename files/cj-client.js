@@ -190,11 +190,10 @@ function cj() {
     d.clear(elm);
     if(g.cj.collection.queries) {
       ul = d.node("div");
-      ul.className = "ui list";
       coll = g.cj.collection.queries;
       for(var query of coll) {
-        li = d.node("li");
-        li.className = "item";
+        li = d.node("div");
+        li.className = "ui segment";
         form = d.node("form");
         form.action = query.href;
         form.className = query.rel;
@@ -238,8 +237,10 @@ function cj() {
       form.method = "post";
       form.className = "add";
       form.onsubmit = httpPost;
-      fs = d.node("fieldset");
-      lg = d.node("legend");
+      fs = d.node("div");
+      fs.className = "ui form";
+      lg = d.node("div");
+      lg.className = "ui dividing header";
       lg.innerHTML = "Add";
       d.push(lg,fs);
       for(var data of coll) { 
@@ -248,6 +249,7 @@ function cj() {
       }
       p = d.node("p");
       inp = d.node("input");
+      inp.className = "ui submit button";
       inp.type = "submit";
       d.push(inp,p);
       d.push(p,fs);
