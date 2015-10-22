@@ -3,6 +3,10 @@
  * May 2015
  * Mike Amundsen (@mamund)
  * Soundtrack : Complete Collection : B.B. King (2008)
+ *
+ * UI work
+ * Benjamin Young (@bigbluehat)
+ * Soundtrack : Burn the Clock : Adam Freeland (2003)
  *******************************************************/
 
 /*  
