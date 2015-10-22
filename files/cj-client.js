@@ -303,8 +303,10 @@ function cj() {
       form.method = "put";
       form.className = "edit";
       form.onsubmit = httpPut;
-      fs = d.node("fieldset");
-      lg = d.node("legend");
+      fs = d.node("div");
+      fs.className = "ui form";
+      lg = d.node("div");
+      lg.className = "ui dividing header";
       lg.innerHTML = "Edit";
       d.push(lg,fs);
       
@@ -318,6 +320,7 @@ function cj() {
       }
       p = d.node("p");
       inp = d.node("input");
+      inp.className = "ui submit button";
       inp.type = "submit";
       d.push(inp,p);
       d.push(p,fs);
