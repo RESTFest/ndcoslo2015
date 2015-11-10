@@ -66,6 +66,23 @@ function domHelp() {
 
     return p;
   }
+
+  function data_row(args) {
+    var p, s1, s2;
+
+    p = node("tr");
+    p.className = args.className||"";
+    s1 = node('th');
+    s1.className = "right aligned";
+    s1.innerHTML = args.text||"";;
+    s2 = node("td");
+    s2.className = "value";
+    s2.innerHTML = args.value||"";
+    push(s1,p);
+    push(s2,p);
+
+    return p;
+  }
   
   function anchor(args) {
     var a;
@@ -153,6 +170,7 @@ function domHelp() {
   that.image = image;
   that.anchor = anchor;
   that.data = data;    
+  that.data_row = data_row;
   that.input = input;
   that.para = para;
   that.option = option;

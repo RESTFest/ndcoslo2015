@@ -126,9 +126,9 @@ function cj() {
 
       for(var item of coll) {
         //li = d.node("li");
-        dl = d.node("dl");
+        dl = d.node("div");
         dl.className = "ui segment";
-        dt = d.node("dt");
+        dt = d.node("div");
         dt.className = "ui mini buttons";
         
         // item link
@@ -150,11 +150,12 @@ function cj() {
           d.push(a3,dt);
         }
         d.push(dt,dl);
+        d.push(dl,elm);
         
-        dd = d.node("dd");
-        dd.className = "ui list";
+        dd = d.node("table");
+        dd.className = "ui very basic collapsing celled table";
         for(var data of item.data) {
-          p = d.data({className:"item "+data.name,text:data.prompt+"&nbsp;",value:data.value+"&nbsp;"});
+          p = d.data_row({className:"item "+data.name,text:data.prompt+"&nbsp;",value:data.value+"&nbsp;"});
           d.push(p,dd);
         }
         if(item.links) {
@@ -178,7 +179,7 @@ function cj() {
         d.push(dd,dl);
         //d.push(dl,li);
         //d.push(li,ul);
-        d.push(dl, elm);
+        //d.push(ul, elm);
       }
       //d.push(ul,elm);
     }
