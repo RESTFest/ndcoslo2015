@@ -72,16 +72,16 @@ function cj() {
   // handle link collection
   function links() {
     var elm, coll;
-    var ul, li, a, img;
+    var menu, item, a, img;
     var head, lnk;
     
     elm = d.find("links");
     d.clear(elm);
     if(g.cj.collection.links) {
       coll = g.cj.collection.links;
-      ul = d.node("div");
-      ul.className = "ui blue fixed top menu";
-      ul.onclick = httpGet;
+      menu = d.node("div");
+      menu.className = "ui blue fixed top menu";
+      menu.onclick = httpGet;
       
       for(var link of coll) {
 
@@ -94,19 +94,19 @@ function cj() {
         }
         
         // render embedded images, if asked
-        li = d.node("li");
-        li.className = "item";
+        item = d.node("li");
+        item.className = "item";
         if(isImage(link)===true) {
           img = d.image({href:link.href,className:link.rel});
-          d.push(img, li);
+          d.push(img, item);
         }
         else {
           a = d.anchor({rel:link.rel,href:link.href,text:link.prompt});
-          d.push(a, li);
+          d.push(a, item);
         }
-        d.push(li, ul);
+        d.push(item, menu);
       }
-      d.push(ul, elm);
+      d.push(menu, elm);
     }
   }
 
