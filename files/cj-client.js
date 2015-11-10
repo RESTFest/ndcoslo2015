@@ -226,7 +226,7 @@ function cj() {
   // handle template object
   function template() {
     var elm, coll;
-    var form, fs, lg, p, lbl, inp;
+    var form, fs, header, p, lbl, inp;
 
     elm = d.find("template");
     d.clear(elm);
@@ -239,10 +239,10 @@ function cj() {
       form.onsubmit = httpPost;
       fs = d.node("div");
       fs.className = "ui form";
-      lg = d.node("div");
-      lg.className = "ui dividing header";
-      lg.innerHTML = "Add";
-      d.push(lg,fs);
+      header = d.node("div");
+      header.className = "ui dividing header";
+      header.innerHTML = "Add";
+      d.push(header,fs);
       for(var data of coll) { 
         p = d.input({prompt:data.prompt+"&nbsp;",name:data.name,value:data.value});
         d.push(p,fs);
