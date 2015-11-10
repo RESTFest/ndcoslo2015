@@ -398,7 +398,9 @@ function cj() {
   
   // mid-level HTTP handlers
   function httpGet(e) {
-    req(e.target.href, "get", null);
+    if (undefined !== e.target.href) {
+      req(e.target.href, "get", null);
+    }
     return false;
   }
   function httpQuery(e) {
