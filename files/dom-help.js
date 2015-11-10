@@ -68,18 +68,18 @@ function domHelp() {
   }
 
   function data_row(args) {
-    var p, s1, s2;
+    var tr, th, td;
 
-    p = node("tr");
-    p.className = args.className||"";
-    s1 = node('th');
-    s1.className = "right aligned";
-    s1.innerHTML = args.text||"";;
-    s2 = node("td");
-    s2.className = "value";
-    s2.innerHTML = args.value||"";
-    push(s1,p);
-    push(s2,p);
+    tr = node("tr");
+    tr.className = args.className||"";
+    th = node('th');
+    th.className = "right aligned";
+    th.innerHTML = args.text||"";;
+    td = node("td");
+    td.className = "value";
+    td.innerHTML = args.value||"";
+    push(th,tr);
+    push(td,tr);
 
     return p;
   }
