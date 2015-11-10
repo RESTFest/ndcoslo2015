@@ -114,8 +114,8 @@ function cj() {
   function items() {
     var elm, coll;
     var ul, li;
-    var dl, dt, dd;
-    var p, s1, s2, img;
+    var segment, buttons, table;
+    var p, img;
     var a1, a2, a3;
 
     elm = d.find("items");
@@ -125,11 +125,10 @@ function cj() {
       ul = d.node("div");
 
       for(var item of coll) {
-        //li = d.node("li");
-        dl = d.node("div");
-        dl.className = "ui segment";
-        dt = d.node("div");
-        dt.className = "ui mini buttons";
+        segment = d.node("div");
+        segment.className = "ui segment";
+        buttons = d.node("div");
+        buttons.className = "ui mini buttons";
         
         // item link
         a1 = d.anchor({href:item.href,rel:item.rel,className:"item link ui basic blue button",text:item.rel});
@@ -147,13 +146,13 @@ function cj() {
         if(isReadOnly(item)===false) {
           a3 = d.anchor({href:item.href,className:"item action ui negative button",rel:"delete",text:"Delete"});
           a3.onclick = httpDelete;
-          d.push(a3,dt);
+          d.push(a3,buttons);
         }
-        d.push(dt,dl);
-        d.push(dl,elm);
+        d.push(buttons,segment);
+        d.push(segment,elm);
         
-        dd = d.node("table");
-        dd.className = "ui very basic collapsing celled table";
+        table = d.node("table");
+        table.className = "ui very basic collapsing celled table";
         for(var data of item.data) {
           p = d.data_row({className:"item "+data.name,text:data.prompt+"&nbsp;",value:data.value+"&nbsp;"});
           d.push(p,dd);
@@ -173,15 +172,11 @@ function cj() {
               a.onclick = httpGet;
               d.push(a, p);
             }
-            d.push(p,dd);
+            d.push(p,table);
           }
         }
-        d.push(dd,dl);
-        //d.push(dl,li);
-        //d.push(li,ul);
-        //d.push(ul, elm);
+        d.push(table,segment);
       }
-      //d.push(ul,elm);
     }
   }
   
