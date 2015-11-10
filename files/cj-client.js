@@ -183,17 +183,17 @@ function cj() {
   // handle query collection
   function queries() {
     var elm, coll;
-    var ul, li;
-    var form, fs, lg, p, lbl, inp;
+    var container, segment;
+    var form, fs, header, p, lbl, inp;
 
     elm = d.find("queries");
     d.clear(elm);
     if(g.cj.collection.queries) {
-      ul = d.node("div");
+      container = d.node("div");
       coll = g.cj.collection.queries;
       for(var query of coll) {
-        li = d.node("div");
-        li.className = "ui segment";
+        segment = d.node("div");
+        segment.className = "ui segment";
         form = d.node("form");
         form.action = query.href;
         form.className = query.rel;
@@ -201,10 +201,10 @@ function cj() {
         form.onsubmit = httpQuery;
         fs = d.node("div");
         fs.className = "ui form";
-        lg = d.node("div");
-        lg.innerHTML = query.prompt + "&nbsp;";
-        lg.className = "ui dividing header";
-        d.push(lg,fs);
+        header = d.node("div");
+        header.innerHTML = query.prompt + "&nbsp;";
+        header.className = "ui dividing header";
+        d.push(header,fs);
         for(var data of query.data) {
           p = d.input({prompt:data.prompt,name:data.name,value:data.value});
           d.push(p,fs);
@@ -216,10 +216,10 @@ function cj() {
         d.push(inp,p);
         d.push(p,fs);
         d.push(fs,form);
-        d.push(form,li);
-        d.push(li,ul);
+        d.push(form,segment);
+        d.push(segment,container);
       }
-      d.push(ul,elm);
+      d.push(container,elm);
     }
   }
   
