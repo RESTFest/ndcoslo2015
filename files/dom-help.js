@@ -31,6 +31,7 @@ function domHelp() {
     var p, lbl, inp;
 
     p = node("p");
+    p.className = "inline field";
     lbl = node("label");
     inp = node("input");
     lbl.className = "data";
@@ -55,13 +56,30 @@ function domHelp() {
     p = node("p");
     p.className = args.className||"";
     s1 = node('span');
-    s1.className = "prompt";
+    s1.className = "prompt ui label";
     s1.innerHTML = args.text||"";;
     s2 = node("span");
     s2.className = "value";
     s2.innerHTML = args.value||"";
     push(s1,p);
     push(s2,p);
+
+    return p;
+  }
+
+  function data_row(args) {
+    var tr, th, td;
+
+    tr = node("tr");
+    tr.className = args.className||"";
+    th = node('th');
+    th.className = "right aligned";
+    th.innerHTML = args.text||"";;
+    td = node("td");
+    td.className = "value";
+    td.innerHTML = args.value||"";
+    push(th,tr);
+    push(td,tr);
 
     return p;
   }
@@ -152,6 +170,7 @@ function domHelp() {
   that.image = image;
   that.anchor = anchor;
   that.data = data;    
+  that.data_row = data_row;
   that.input = input;
   that.para = para;
   that.option = option;

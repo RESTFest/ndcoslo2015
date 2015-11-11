@@ -3,6 +3,10 @@
  * May 2015
  * Mike Amundsen (@mamund)
  * Soundtrack : Complete Collection : B.B. King (2008)
+ *
+ * UI work
+ * Benjamin Young (@bigbluehat)
+ * Soundtrack : Burn the Clock : Adam Freeland (2003)
  *******************************************************/
 
 /*  
@@ -68,15 +72,16 @@ function cj() {
   // handle link collection
   function links() {
     var elm, coll;
-    var ul, li, a, img;
+    var menu, item, a, img;
     var head, lnk;
     
     elm = d.find("links");
     d.clear(elm);
     if(g.cj.collection.links) {
       coll = g.cj.collection.links;
-      ul = d.node("ul");
-      ul.onclick = httpGet;
+      menu = d.node("div");
+      menu.className = "ui blue fixed top menu";
+      menu.onclick = httpGet;
       
       for(var link of coll) {
 
@@ -89,18 +94,19 @@ function cj() {
         }
         
         // render embedded images, if asked
-        li = d.node("li");
+        item = d.node("li");
+        item.className = "item";
         if(isImage(link)===true) {
           img = d.image({href:link.href,className:link.rel});
-          d.push(img, li);
+          d.push(img, item);
         }
         else {
           a = d.anchor({rel:link.rel,href:link.href,text:link.prompt});
-          d.push(a, li);
+          d.push(a, item);
         }
-        d.push(li, ul);
+        d.push(item, menu);
       }
-      d.push(ul, elm);
+      d.push(menu, elm);
     }
   }
 
@@ -108,44 +114,47 @@ function cj() {
   function items() {
     var elm, coll;
     var ul, li;
-    var dl, dt, dd;
-    var p, s1, s2, img;
+    var segment, buttons, table;
+    var p, img;
     var a1, a2, a3;
 
     elm = d.find("items");
     d.clear(elm);
     if(g.cj.collection.items) {
       coll = g.cj.collection.items;
-      ul = d.node("ul");
+      ul = d.node("div");
 
       for(var item of coll) {
-        li = d.node("li");
-        dl = d.node("dl");
-        dt = d.node("dt");
+        segment = d.node("div");
+        segment.className = "ui segment";
+        buttons = d.node("div");
+        buttons.className = "ui mini buttons";
         
         // item link
-        a1 = d.anchor({href:item.href,rel:item.rel,className:"item link",text:item.rel});
+        a1 = d.anchor({href:item.href,rel:item.rel,className:"item link ui basic blue button",text:item.rel});
         a1.onclick = httpGet;
         d.push(a1,dt);
         
         // edit link
         if(isReadOnly(item)===false && hasTemplate(g.cj.collection)===true) {
-          a2 = d.anchor({href:item.href,rel:"edit",className:"item action",text:"Edit"});
+          a2 = d.anchor({href:item.href,rel:"edit",className:"item action ui positive button",text:"Edit"});
           a2.onclick = cjEdit;
           d.push(a2, dt);
         }
 
         // delete link
         if(isReadOnly(item)===false) {
-          a3 = d.anchor({href:item.href,className:"item action",rel:"delete",text:"Delete"});
+          a3 = d.anchor({href:item.href,className:"item action ui negative button",rel:"delete",text:"Delete"});
           a3.onclick = httpDelete;
-          d.push(a3,dt);
+          d.push(a3,buttons);
         }
-        d.push(dt,dl);
+        d.push(buttons,segment);
+        d.push(segment,elm);
         
-        dd = d.node("dd");
+        table = d.node("table");
+        table.className = "ui very basic collapsing celled table";
         for(var data of item.data) {
-          p = d.data({className:"item "+data.name,text:data.prompt+"&nbsp;",value:data.value+"&nbsp;"});
+          p = d.data_row({className:"item "+data.name,text:data.prompt+"&nbsp;",value:data.value+"&nbsp;"});
           d.push(p,dd);
         }
         if(item.links) {
@@ -163,39 +172,39 @@ function cj() {
               a.onclick = httpGet;
               d.push(a, p);
             }
-            d.push(p,dd);
+            d.push(p,table);
           }
         }
-        d.push(dd,dl);
-        d.push(dl,li);
-        d.push(li,ul);
+        d.push(table,segment);
       }
-      d.push(ul,elm);
     }
   }
   
   // handle query collection
   function queries() {
     var elm, coll;
-    var ul, li;
-    var form, fs, lg, p, lbl, inp;
+    var container, segment;
+    var form, fs, header, p, lbl, inp;
 
     elm = d.find("queries");
     d.clear(elm);
     if(g.cj.collection.queries) {
-      ul = d.node("ul");
+      container = d.node("div");
       coll = g.cj.collection.queries;
       for(var query of coll) {
-        li = d.node("li");
+        segment = d.node("div");
+        segment.className = "ui segment";
         form = d.node("form");
         form.action = query.href;
         form.className = query.rel;
         form.method = "get";
         form.onsubmit = httpQuery;
-        fs = d.node("fieldset");
-        lg = d.node("legend");
-        lg.innerHTML = query.prompt + "&nbsp;";
-        d.push(lg,fs);
+        fs = d.node("div");
+        fs.className = "ui form";
+        header = d.node("div");
+        header.innerHTML = query.prompt + "&nbsp;";
+        header.className = "ui dividing header";
+        d.push(header,fs);
         for(var data of query.data) {
           p = d.input({prompt:data.prompt,name:data.name,value:data.value});
           d.push(p,fs);
@@ -203,20 +212,21 @@ function cj() {
         p = d.node("p");
         inp = d.node("input");
         inp.type = "submit";
+        inp.className = "ui mini submit button";
         d.push(inp,p);
         d.push(p,fs);
         d.push(fs,form);
-        d.push(form,li);
-        d.push(li,ul);
+        d.push(form,segment);
+        d.push(segment,container);
       }
-      d.push(ul,elm);
+      d.push(container,elm);
     }
   }
   
   // handle template object
   function template() {
     var elm, coll;
-    var form, fs, lg, p, lbl, inp;
+    var form, fs, header, p, lbl, inp;
 
     elm = d.find("template");
     d.clear(elm);
@@ -227,16 +237,19 @@ function cj() {
       form.method = "post";
       form.className = "add";
       form.onsubmit = httpPost;
-      fs = d.node("fieldset");
-      lg = d.node("legend");
-      lg.innerHTML = "Add";
-      d.push(lg,fs);
+      fs = d.node("div");
+      fs.className = "ui form";
+      header = d.node("div");
+      header.className = "ui dividing header";
+      header.innerHTML = "Add";
+      d.push(header,fs);
       for(var data of coll) { 
         p = d.input({prompt:data.prompt+"&nbsp;",name:data.name,value:data.value});
         d.push(p,fs);
       }
       p = d.node("p");
       inp = d.node("input");
+      inp.className = "ui submit button";
       inp.type = "submit";
       d.push(inp,p);
       d.push(p,fs);
@@ -272,7 +285,7 @@ function cj() {
   // render editable form for an item
   function cjEdit(e) {
     var elm, coll;
-    var form, fs, lg, p, lbl, inp;
+    var form, fs, header, p, lbl, inp;
     var data, item, dv, tx;
     
     elm = d.find("edit");
@@ -286,10 +299,12 @@ function cj() {
       form.method = "put";
       form.className = "edit";
       form.onsubmit = httpPut;
-      fs = d.node("fieldset");
-      lg = d.node("legend");
-      lg.innerHTML = "Edit";
-      d.push(lg,fs);
+      fs = d.node("div");
+      fs.className = "ui form";
+      header = d.node("div");
+      header.className = "ui dividing header";
+      header.innerHTML = "Edit";
+      d.push(header,fs);
       
       // get template for editing
       coll = g.cj.collection.template.data;
@@ -301,6 +316,7 @@ function cj() {
       }
       p = d.node("p");
       inp = d.node("input");
+      inp.className = "ui submit button";
       inp.type = "submit";
       d.push(inp,p);
       d.push(p,fs);
@@ -377,7 +393,9 @@ function cj() {
   
   // mid-level HTTP handlers
   function httpGet(e) {
-    req(e.target.href, "get", null);
+    if (undefined !== e.target.href) {
+      req(e.target.href, "get", null);
+    }
     return false;
   }
   function httpQuery(e) {
