@@ -1,5 +1,5 @@
 /*******************************************************
- * todo-mvc implementation based on ALPS doc
+ * task service implementation
  * transitions document (server)
  * May 2015
  * Mike Amundsen (@mamund)
@@ -38,6 +38,7 @@ function fillTrans() {
   trans.push({
     name : "searchLink",
     type : "safe",
+    action: "read",
     kind : "todo",
     target : "list",
     prompt : "Search ToDos"
@@ -45,6 +46,7 @@ function fillTrans() {
   trans.push({
     name : "searchForm",
     type : "safe",
+    action : "read",
     kind : "todo",
     target : "list",
     prompt : "Search ToDos",
@@ -52,11 +54,12 @@ function fillTrans() {
       {name : "title", prompt : "Title", value : ""}
     ]
   });
-
+  
   // self transition
   trans.push({
     name : "selfLink",
     type : "safe",
+    action : "read",
     kind : "self",
     target : "self",
     prompt : "Reload"
@@ -66,6 +69,7 @@ function fillTrans() {
   trans.push({
     name : "homeLink",
     type : "safe",
+    action : "read",
     kind : "home",
     target : "list",
     prompt : "Home"
@@ -75,6 +79,7 @@ function fillTrans() {
   trans.push({
     name : "listAll",
     type : "safe",
+    action : "read",
     kind : "todo",
     target : "list",
     prompt : "All ToDo"
@@ -82,6 +87,7 @@ function fillTrans() {
   trans.push({
     name : "listActive",
     type : "safe",
+    action : "read",
     kind : "todo",
     target : "list",
     prompt : "Active ToDos",
@@ -92,6 +98,7 @@ function fillTrans() {
   trans.push({
     name : "listCompleted",
     type : "safe",
+    action : "read",
     kind : "todo",
     target : "list",
     prompt : "Completed ToDos",
@@ -103,6 +110,7 @@ function fillTrans() {
   trans.push({
     name : "addLink",
     type : "safe",
+    action : "read",
     kind : "todo",
     target : "list",
     prompt : "Add ToDo"
@@ -110,6 +118,7 @@ function fillTrans() {
   trans.push({
     name : "addForm",
     type : "unsafe",
+    action : "append",
     kind : "todo",
     target : "list",
     prompt : "Add ToDo",
@@ -122,6 +131,7 @@ function fillTrans() {
   trans.push({
     name : "editLink",
     type : "safe",
+    action : "read",
     kind : "todo",
     target : "item",
     prompt : "Edit ToDo"
@@ -129,6 +139,7 @@ function fillTrans() {
   trans.push({
     name : "editForm",
     type : "unsafe",
+    action : "replace",
     kind : "todo",
     prompt : "Edit ToDo",
     inputs : [
@@ -141,6 +152,7 @@ function fillTrans() {
   trans.push({
     name : "removeLink",
     type : "safe",
+    action : "read",
     kind : "todo",
     target : "item",
     prompt : "Remove ToDo"
@@ -148,6 +160,7 @@ function fillTrans() {
   trans.push({
     name : "removeForm",
     type : "unsafe",
+    action : "remove",
     kind : "todo",
     prompt : "Remove ToDo",
     inputs : [
@@ -158,6 +171,7 @@ function fillTrans() {
   trans.push({
     name : "completedLink",
     type : "safe",
+    action : "read",
     kind : "todo",
     target : "item",
     prompt : "Mark Completed"
@@ -165,6 +179,7 @@ function fillTrans() {
   trans.push({
     name : "completedForm",
     type : "unsafe",
+    action : "append",
     kind : "todo",
     prompt : "Mark Completed",
     inputs : [
@@ -176,6 +191,7 @@ function fillTrans() {
   trans.push({
     name : "clearCompletedLink",
     type : "safe",
+    action : "read",
     kind : "todo",
     target : "list",
     prompt : "Clear Completed"
@@ -183,6 +199,7 @@ function fillTrans() {
   trans.push({
     name : "clearCompletedForm",
     type : "unsafe",
+    action : "append",
     kind : "todo",
     target : "list",
     prompt : "Clear Completed",

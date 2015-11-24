@@ -7,8 +7,7 @@
  *******************************************************/
 
 /* NOTE:  
-  - has fatal dependency on:
-    - dom-help.js
+  - has fatal dependency on: dom-help.js
   - uses no other external libs/frameworks
   
   - built/tested for chrome browser (YMMV on other browsers)
@@ -127,7 +126,10 @@ function siren() {
 
         dd = d.node("dd");
         for(var prop in item) {
-          if(prop!=="href" && prop!=="class" && prop!=="type" && prop!=="rel") {
+          if(prop!=="href" && 
+            prop!=="class" && 
+            prop!=="type" && 
+            prop!=="rel") {
             p = d.data({
               className:"item "+item.class.join(" "),
               text:prop+"&nbsp;",
@@ -146,12 +148,53 @@ function siren() {
   
   // actions  
   function actions() {
+    var elm, coll;
+    var ul, li, frm, lg, fs, fld, inp, p;
+    
+    elm = d.find("actions");
+    d.clear(elm);
+
+    if(g.msg.actions) {
+      coll = g.msg.actions;
+      ul = d.node("ul");
+      for(var act of coll) {
+        li = d.node("li");
+        frm = d.node("form");
+        frm.id = act.name;
+        frm.method = act.method;
+        frm.action = act.href;
+        frm.onsubmit = httpForm;
+        fs = d.node("fieldset");
+        lg = d.node("legend");
+        lg.innerHTML = act.title;
+        d.push(lg, fs);
+        for (var fld of act.fields) {
+          p = d.input({
+            "prompt" : fld.title||fld.name,
+            "name" : fld.name,
+            "className" : fld.class.join(" "),
+            "value" : fld.value||"",
+            "type" : fld.type||"text"});
+          d.push(p,fs);                    
+        }
+        p = d.node("p");
+        inp = d.node("input");
+        inp.type = "submit";
+        d.push(inp, p);
+        d.push(p, fs);
+        
+        d.push(fs, frm);
+        d.push(frm, li);
+        d.push(li, ul);
+      }
+      d.push(ul, elm);
+    }
   }  
   
   // properties
   function properties() {
     var elm, coll;
-    var dl, dt, dd, a, p;
+    var ul, dl, dt, dd, a, p;
     
     elm = d.find("properties");
     d.clear(elm);
@@ -193,7 +236,7 @@ function siren() {
     elm = d.find("properties");
     d.clear(elm);
   }
-  
+
   // ********************************
   // ajax helpers
   // ********************************  
@@ -201,6 +244,46 @@ function siren() {
   // mid-level HTTP handlers
   function httpGet(e) {
     req(e.target.href, "get", null);
+    return false;
+  }
+
+  function httpForm(e) {
+    var form, coll, method, url, i, x, args, body;
+
+    body = null;
+    args = {};
+    form = e.target;
+    url = form.action; 
+    method = form.method.toLowerCase();
+    nodes = d.tags("input", form);
+    for (i = 0, x = nodes.length; i < x; i++) {
+      if (nodes[i].name && nodes[i].name !== '') {
+        args[nodes[i].name] = nodes[i].value;
+      }
+    }
+    if(method==="get") {
+      i = 0;
+      for(var inp in args) {
+        if(i===0) {
+          url +="?";
+          i++;
+        }
+        else {
+          url +="&";
+        }
+        url += inp + "=" + args[inp];
+      }
+    }
+    else {
+      body = "";
+      for(var inp in args) {
+        if(body!=="") {
+          body += "&";
+        }
+        body += inp + "=" + args[inp];
+      }
+    }
+    req(url, method, body);
     return false;
   }
   

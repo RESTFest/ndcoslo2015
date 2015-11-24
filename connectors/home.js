@@ -1,5 +1,5 @@
 /*******************************************************
- * todo-mvc implementation based on ALPS doc
+ * task service implementation
  * home connector (server)
  * May 2015
  * Mike Amundsen (@mamund)
@@ -186,10 +186,12 @@ function sendList(req, res, respond, filter) {
   coll.splice(coll.length, 0, tran);
 
   // add for NDC Oslo
+  /*
   tran = transitions("searchForm");
   tran.href = root + "/";
   tran.rel = ["search"];
   coll.splice(coll.length, 0, tran);
+  */
   
   // compose graph 
   doc = {};
