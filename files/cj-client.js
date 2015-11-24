@@ -133,13 +133,13 @@ function cj() {
         // item link
         a1 = d.anchor({href:item.href,rel:item.rel,className:"item link ui basic blue button",text:item.rel});
         a1.onclick = httpGet;
-        d.push(a1,dt);
+        d.push(a1,buttons);
         
         // edit link
         if(isReadOnly(item)===false && hasTemplate(g.cj.collection)===true) {
           a2 = d.anchor({href:item.href,rel:"edit",className:"item action ui positive button",text:"Edit"});
           a2.onclick = cjEdit;
-          d.push(a2, dt);
+          d.push(a2, buttons);
         }
 
         // delete link
@@ -154,8 +154,8 @@ function cj() {
         table = d.node("table");
         table.className = "ui very basic collapsing celled table";
         for(var data of item.data) {
-          p = d.data_row({className:"item "+data.name,text:data.prompt+"&nbsp;",value:data.value+"&nbsp;"});
-          d.push(p,dd);
+          tr = d.data_row({className:"item "+data.name,text:data.prompt+"&nbsp;",value:data.value+"&nbsp;"});
+          d.push(tr,table);
         }
         if(item.links) {
           for(var link of item.links) {

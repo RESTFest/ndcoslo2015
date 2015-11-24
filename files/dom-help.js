@@ -81,7 +81,7 @@ function domHelp() {
     push(th,tr);
     push(td,tr);
 
-    return p;
+    return tr;
   }
   
   function anchor(args) {
