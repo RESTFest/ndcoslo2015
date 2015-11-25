@@ -7,8 +7,7 @@
  *******************************************************/
 
 /* NOTE:  
-  - has fatal dependency on:
-    - dom-help.js
+  - has fatal dependency on: dom-help.js
   - uses no other external libs/frameworks
   
   - built/tested for chrome browser (YMMV on other browsers)
@@ -80,11 +79,14 @@ function siren() {
     d.clear(elm);
 
     if(g.msg.links) {
-      ul = d.node("ul");
-      ul.onclick = httpGet;      
       coll = g.msg.links;
+      menu = d.node("div");
+      menu.className = "ui blue fixed top menu";
+      menu.onclick = httpGet;
+
       for(var link of coll) {
-        li = d.node("li");
+        item = d.node("li");
+        item.className = "item";
         a = d.anchor({
           rel:link.rel.join(" "),
           href:link.href,
@@ -92,10 +94,10 @@ function siren() {
           className:link.class.join(" "),
           type:link.type||""
         });
-        d.push(a, li);
-        d.push(li,ul);
+        d.push(a, item);
+        d.push(item, menu);
       }
-      d.push(ul, elm);
+      d.push(menu, elm);
     }
   }
 
@@ -108,13 +110,11 @@ function siren() {
     d.clear(elm);
     
     if(g.msg.entities) {
-      ul = d.node("ul");
       
       coll = g.msg.entities;
       for(var item of coll) {
-        li = d.node("li");
-        dl = d.node("dl");
-        dt = d.node("dt");
+        segment = d.node("div");
+        segment.className = "ui segment";
         
         a = d.anchor({
           href:item.href,
@@ -122,55 +122,100 @@ function siren() {
           className:item.class.join(" "),
           text:item.title||item.href});
         a.onclick = httpGet;
-        d.push(a, dt);
-        d.push(dt, dl);
+        d.push(a, segment);
 
-        dd = d.node("dd");
+        table = d.node("table");
+        table.className = "ui very basic collapsing celled table";
         for(var prop in item) {
-          if(prop!=="href" && prop!=="class" && prop!=="type" && prop!=="rel") {
-            p = d.data({
+          if(prop!=="href" && 
+            prop!=="class" && 
+            prop!=="type" && 
+            prop!=="rel") {
+            tr = d.data_row({
               className:"item "+item.class.join(" "),
               text:prop+"&nbsp;",
               value:item[prop]+"&nbsp;"
             });
-            d.push(p,dd);
+            d.push(tr,table);
           }
         }
-        d.push(dd, dl);
-        d.push(dl, li);
-        d.push(li, ul);
+        d.push(table, segment);
+        d.push(segment, elm);
       }
-      d.push(ul, elm);
     }
   }
   
   // actions  
   function actions() {
+    var elm, coll;
+    var ul, li, frm, lg, fs, fld, inp, p;
+    
+    elm = d.find("actions");
+    d.clear(elm);
+
+    if(g.msg.actions) {
+      coll = g.msg.actions;
+      for(var act of coll) {
+        segment = d.node("div");
+        segment.className = "ui segment";
+        frm = d.node("form");
+        frm.id = act.name;
+        frm.method = act.method;
+        frm.action = act.href;
+        frm.onsubmit = httpForm;
+        fs = d.node("div");
+        fs.className = "ui form";
+        header = d.node("div");
+        header.innerHTML = act.title;
+        header.className = "ui dividing header";
+        d.push(header, fs);
+        for (var fld of act.fields) {
+          p = d.input({
+            "prompt" : fld.title||fld.name,
+            "name" : fld.name,
+            "className" : fld.class.join(" "),
+            "value" : fld.value||"",
+            "type" : fld.type||"text"});
+          d.push(p,fs);                    
+        }
+        p = d.node("p");
+        inp = d.node("input");
+        inp.type = "submit";
+        inp.className = "ui mini submit button";
+        d.push(inp, p);
+        d.push(p, fs);
+        
+        d.push(fs, frm);
+        d.push(frm, segment);
+        d.push(segment, elm);
+      }
+    }
   }  
   
   // properties
   function properties() {
     var elm, coll;
-    var dl, dt, dd, a, p;
+    var ul, dl, dt, dd, a, p;
     
     elm = d.find("properties");
     d.clear(elm);
     
     if(g.msg.properties) {
-      ul = d.node("ul");
-      dl = d.node("dl");
-      dd = d.node("dd");
+      segment = d.node("div");
+      segment.className = "ui segment";
+      table = d.node("table");
+      table.className = "ui very basic collapsing celled table";
       coll = g.msg.properties;
       for(var prop in coll) {        
-        p = d.data({
+        tr = d.data_row({
           className:"item "+g.msg.class.join(" ")||"",
           text:prop+"&nbsp;",
           value:coll[prop]+"&nbsp;"
         });
-        d.push(p,dd);
+        d.push(tr, table);
       }
-      d.push(dd, dl);
-      d.push(dl, elm);
+      d.push(table, segment);
+      d.push(segment, elm);
     }
   }  
 
@@ -193,7 +238,7 @@ function siren() {
     elm = d.find("properties");
     d.clear(elm);
   }
-  
+
   // ********************************
   // ajax helpers
   // ********************************  
@@ -201,6 +246,46 @@ function siren() {
   // mid-level HTTP handlers
   function httpGet(e) {
     req(e.target.href, "get", null);
+    return false;
+  }
+
+  function httpForm(e) {
+    var form, coll, method, url, i, x, args, body;
+
+    body = null;
+    args = {};
+    form = e.target;
+    url = form.action; 
+    method = form.method.toLowerCase();
+    nodes = d.tags("input", form);
+    for (i = 0, x = nodes.length; i < x; i++) {
+      if (nodes[i].name && nodes[i].name !== '') {
+        args[nodes[i].name] = nodes[i].value;
+      }
+    }
+    if(method==="get") {
+      i = 0;
+      for(var inp in args) {
+        if(i===0) {
+          url +="?";
+          i++;
+        }
+        else {
+          url +="&";
+        }
+        url += inp + "=" + args[inp];
+      }
+    }
+    else {
+      body = "";
+      for(var inp in args) {
+        if(body!=="") {
+          body += "&";
+        }
+        body += inp + "=" + args[inp];
+      }
+    }
+    req(url, method, body);
     return false;
   }
   
