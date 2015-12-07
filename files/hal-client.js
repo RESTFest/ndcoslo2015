@@ -74,13 +74,14 @@ function hal() {
   // the real stuff starts here
   function links() {
     var elm, coll;
-    var ul, li, a, sel, opt;
+    var menu, item, a, sel, opt;
     
     elm = d.find("links");
     d.clear(elm);
     if(g.hal._links) {
       coll = g.hal._links;
-      ul = d.node("ul");
+      menu = d.node("div");
+      menu.className = "ui blue fixed top menu";
       
       for(var link in coll) {
         // render link collections as HTML select
@@ -103,9 +104,10 @@ function hal() {
             d.push(opt, sel);
           }
 
-          li = d.node("li");
-          d.push(sel, li);
-          d.push(li, ul);
+          item = d.node("li");
+          item.className = "item";
+          d.push(sel, item);
+          d.push(item, menu);
         }
         else {
           a = d.anchor({
@@ -118,13 +120,14 @@ function hal() {
           a.setAttribute("templated", coll[link].templated||"false");
           a = halAttributes(a,coll[link]);
           
-          li = d.node("li");
-          li.onclick = halLink;
-          d.push(a, li);
-          d.push(li, ul);
+          item = d.node("li");
+          item.onclick = halLink;
+          item.className = "item";
+          d.push(a, item);
+          d.push(item, menu);
         }
       }
-      d.push(ul, elm);
+      d.push(menu, elm);
     }
   }
 
