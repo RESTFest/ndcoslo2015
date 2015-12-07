@@ -132,22 +132,19 @@ function hal() {
   // handle any embedded content
   function embedded() {
     var elm, embeds;
-    var ul, li, dl, dt, dd;
-    var segment_list, segment, table, tr;
+    var segment, table, tr;
     
     elm = d.find("embedded");
     d.clear(elm);
     
     if(g.hal._embedded) {
-      segment_list = d.node("div");
-      segment_list.className = "ui segments";
       
       // get all the rel/sets for this response
       embeds = g.hal._embedded;
       for(var coll in embeds) {
 
         p = d.para({text:coll, className:"ui header segment"});
-        d.push(p,segment_list);
+        d.push(p,elm);
         
         // get all the links for this rel/set
         items = embeds[coll];
@@ -166,7 +163,7 @@ function hal() {
           a = halAttributes(a,itm);
           a.onclick = halLink;
           d.push(a,segment);
-          d.push(segment, segment_list);
+          d.push(segment, elm);
           
           // emit all the properties for this item
           table = d.node("table");
@@ -178,11 +175,10 @@ function hal() {
             }
           }
           d.push(table,segment);
-          d.push(segment, segment_list);
+          d.push(segment, elm);
         }        
       }
     }
-    if(segment_list) {d.push(segment_list, elm);}
   }
   
   // properties

@@ -15,11 +15,17 @@
     <!--link href="hal-client.css" rel="stylesheet" /-->
   </head>
   <body>
-    <h1 id="title"></h1>
+    <h1 id="title" class="ui page header"></h1>
     <div id="links"></div>
-    <div id="form"></div>
-    <div id="embedded"></div>
-    <div id="properties"></div>
+    <div class="ui two column grid" style="margin-top: 2em">
+      <div class="column">
+        <div id="embedded" class="ui segments"></div>
+        <div id="properties"></div>
+      </div>
+      <div class="column">
+        <div id="form"></div>
+      </div>
+    </div>
     <div>
       <pre id="dump"></pre>
     </div>
