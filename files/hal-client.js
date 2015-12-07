@@ -207,7 +207,7 @@ function hal() {
   // see the halForms() lib for inputs
   function halShowForm(f, href, title) {
     var elm, coll, val;
-    var form, lg, fs, p, inp;
+    var form, header, fs, p, inp;
      
     elm = d.find("form");
     d.clear(elm);
@@ -218,13 +218,18 @@ function hal() {
     form.setAttribute("halmethod", f.method);
     form.className = f.rel;
     form.onsubmit = halSubmit;
-    fs = d.node("fieldset");
-    lg = d.node("legend");
-    lg.innerHTML = title||"Form";
-    d.push(lg, fs);
+    fs = d.node("div");
+    fs.className = "ui form";
+    header = d.node("div");
+    header.innerHTML = title||"Form";
+    header.className = "ui dividing header";
+    d.push(header, fs);
 
     coll = f.properties;
     for(var prop of coll) {
+      segment = d.node("div");
+      segment.className = "ui segment";
+
       val = prop.value;
       if(g.hal[prop.name]) {
         val = val.replace("{"+prop.name+"}",g.hal[prop.name]);
@@ -242,17 +247,20 @@ function hal() {
     p = d.node("p");
     inp = d.node("input");
     inp.type = "submit";
+    inp.className = "ui mini positive button";
     d.push(inp,p);
 
     inp = d.node("input");
     inp.type = "button";
     inp.value = "Cancel";
     inp.onclick = function(){elm = d.find("form");d.clear(elm);}
+    inp.className = "ui mini button";
     d.push(inp,p);
 
     d.push(p,fs);            
     d.push(fs,form);
-    d.push(form, elm);
+    d.push(form, segment);
+    d.push(segment, elm);
   }  
   
   // ***************************
