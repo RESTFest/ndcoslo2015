@@ -133,25 +133,27 @@ function hal() {
   function embedded() {
     var elm, embeds;
     var ul, li, dl, dt, dd;
+    var segment_list, segment, table, tr;
     
     elm = d.find("embedded");
     d.clear(elm);
     
     if(g.hal._embedded) {
-      ul = d.node("ul");
+      segment_list = d.node("div");
+      segment_list.className = "ui segments";
       
       // get all the rel/sets for this response
       embeds = g.hal._embedded;
       for(var coll in embeds) {
-        li = d.node("li");
-        dl = d.node("dl");
-        p = d.para({text:coll, className:"embedded group"});
-        d.push(p,li);
+
+        p = d.para({text:coll, className:"ui header segment"});
+        d.push(p,segment_list);
         
         // get all the links for this rel/set
         items = embeds[coll];
         for(var itm of items) {
-          dt = d.node("dt");
+          segment = d.node("div");
+          segment.className = "ui segment";
           
           // pluck href from the properties
           a = d.anchor({
@@ -163,24 +165,24 @@ function hal() {
           a.setAttribute("templated", itm.templated||"false");
           a = halAttributes(a,itm);
           a.onclick = halLink;
-          d.push(a,dt);
-          d.push(dt, dl);
+          d.push(a,segment);
+          d.push(segment, segment_list);
           
           // emit all the properties for this item
-          dd = d.node("dd");
+          table = d.node("table");
+          table.className = "ui very basic collapsing celled table";
           for(var prop in itm) {
             if(prop!=="href") {
-              p = d.data({className:"property "+prop,text:prop+"&nbsp;",value:itm[prop]+"&nbsp;"});
-              d.push(p,dd);
+              tr = d.data_row({className:"property "+prop,text:prop+"&nbsp;",value:itm[prop]+"&nbsp;"});
+              d.push(tr,table);
             }
           }
-          d.push(dd,dl);
+          d.push(table,segment);
+          d.push(segment, segment_list);
         }        
-        d.push(dl, li);
       }
-      d.push(li, ul);
     }
-    if(ul) {d.push(ul, elm);}
+    if(segment_list) {d.push(segment_list, elm);}
   }
   
   // properties
