@@ -185,21 +185,23 @@ function hal() {
   // emit any root-level properties
   function properties() {
     var elm, coll;
-    var dl, dt, dd;
+    var segment, table, tr;
     
     elm = d.find("properties");
     d.clear(elm);
-    dl = d.node("dl");
+    segment = d.node("div");
+    segment.className = "ui segment";
     
-    dd = d.node("dd");
+    table = d.node("table");
+    table.className = "ui very basic collapsing celled table";
     for(var prop in g.hal) {
       if(prop!=="_links" && prop!=="_embedded") {      
-        p = d.data({className:"property "+prop,text:prop+"&nbsp;",value:g.hal[prop]+"&nbsp;"});
-        d.push(p,dd);
+        tr = d.data_row({className:"property "+prop,text:prop+"&nbsp;",value:g.hal[prop]+"&nbsp;"});
+        d.push(tr,table);
       }
-      d.push(dd,dl);
     }
-    d.push(dl,elm);
+    d.push(table,segment);
+    d.push(segment,elm);
   }  
   
   // show form for input
