@@ -74,13 +74,14 @@ function hal() {
   // the real stuff starts here
   function links() {
     var elm, coll;
-    var ul, li, a, sel, opt;
+    var menu, item, a, sel, opt;
     
     elm = d.find("links");
     d.clear(elm);
     if(g.hal._links) {
       coll = g.hal._links;
-      ul = d.node("ul");
+      menu = d.node("div");
+      menu.className = "ui blue fixed top menu";
       
       for(var link in coll) {
         // render link collections as HTML select
@@ -103,9 +104,10 @@ function hal() {
             d.push(opt, sel);
           }
 
-          li = d.node("li");
-          d.push(sel, li);
-          d.push(li, ul);
+          item = d.node("li");
+          item.className = "item";
+          d.push(sel, item);
+          d.push(item, menu);
         }
         else {
           a = d.anchor({
@@ -118,13 +120,14 @@ function hal() {
           a.setAttribute("templated", coll[link].templated||"false");
           a = halAttributes(a,coll[link]);
           
-          li = d.node("li");
-          li.onclick = halLink;
-          d.push(a, li);
-          d.push(li, ul);
+          item = d.node("li");
+          item.onclick = halLink;
+          item.className = "item";
+          d.push(a, item);
+          d.push(item, menu);
         }
       }
-      d.push(ul, elm);
+      d.push(menu, elm);
     }
   }
 
@@ -132,26 +135,25 @@ function hal() {
   // handle any embedded content
   function embedded() {
     var elm, embeds;
-    var ul, li, dl, dt, dd;
+    var segment, table, tr;
     
     elm = d.find("embedded");
     d.clear(elm);
     
     if(g.hal._embedded) {
-      ul = d.node("ul");
       
       // get all the rel/sets for this response
       embeds = g.hal._embedded;
       for(var coll in embeds) {
-        li = d.node("li");
-        dl = d.node("dl");
-        p = d.para({text:coll, className:"embedded group"});
-        d.push(p,li);
+
+        p = d.para({text:coll, className:"ui header segment"});
+        d.push(p,elm);
         
         // get all the links for this rel/set
         items = embeds[coll];
         for(var itm of items) {
-          dt = d.node("dt");
+          segment = d.node("div");
+          segment.className = "ui segment";
           
           // pluck href from the properties
           a = d.anchor({
@@ -163,45 +165,46 @@ function hal() {
           a.setAttribute("templated", itm.templated||"false");
           a = halAttributes(a,itm);
           a.onclick = halLink;
-          d.push(a,dt);
-          d.push(dt, dl);
+          d.push(a,segment);
+          d.push(segment, elm);
           
           // emit all the properties for this item
-          dd = d.node("dd");
+          table = d.node("table");
+          table.className = "ui very basic collapsing celled table";
           for(var prop in itm) {
             if(prop!=="href") {
-              p = d.data({className:"property "+prop,text:prop+"&nbsp;",value:itm[prop]+"&nbsp;"});
-              d.push(p,dd);
+              tr = d.data_row({className:"property "+prop,text:prop+"&nbsp;",value:itm[prop]+"&nbsp;"});
+              d.push(tr,table);
             }
           }
-          d.push(dd,dl);
+          d.push(table,segment);
+          d.push(segment, elm);
         }        
-        d.push(dl, li);
       }
-      d.push(li, ul);
     }
-    if(ul) {d.push(ul, elm);}
   }
   
   // properties
   // emit any root-level properties
   function properties() {
     var elm, coll;
-    var dl, dt, dd;
+    var segment, table, tr;
     
     elm = d.find("properties");
     d.clear(elm);
-    dl = d.node("dl");
+    segment = d.node("div");
+    segment.className = "ui segment";
     
-    dd = d.node("dd");
+    table = d.node("table");
+    table.className = "ui very basic collapsing celled table";
     for(var prop in g.hal) {
       if(prop!=="_links" && prop!=="_embedded") {      
-        p = d.data({className:"property "+prop,text:prop+"&nbsp;",value:g.hal[prop]+"&nbsp;"});
-        d.push(p,dd);
+        tr = d.data_row({className:"property "+prop,text:prop+"&nbsp;",value:g.hal[prop]+"&nbsp;"});
+        d.push(tr,table);
       }
-      d.push(dd,dl);
     }
-    d.push(dl,elm);
+    d.push(table,segment);
+    d.push(segment,elm);
   }  
   
   // show form for input
@@ -209,7 +212,7 @@ function hal() {
   // see the halForms() lib for inputs
   function halShowForm(f, href, title) {
     var elm, coll, val;
-    var form, lg, fs, p, inp;
+    var form, header, fs, p, inp;
      
     elm = d.find("form");
     d.clear(elm);
@@ -220,13 +223,18 @@ function hal() {
     form.setAttribute("halmethod", f.method);
     form.className = f.rel;
     form.onsubmit = halSubmit;
-    fs = d.node("fieldset");
-    lg = d.node("legend");
-    lg.innerHTML = title||"Form";
-    d.push(lg, fs);
+    fs = d.node("div");
+    fs.className = "ui form";
+    header = d.node("div");
+    header.innerHTML = title||"Form";
+    header.className = "ui dividing header";
+    d.push(header, fs);
 
     coll = f.properties;
     for(var prop of coll) {
+      segment = d.node("div");
+      segment.className = "ui segment";
+
       val = prop.value;
       if(g.hal[prop.name]) {
         val = val.replace("{"+prop.name+"}",g.hal[prop.name]);
@@ -244,17 +252,20 @@ function hal() {
     p = d.node("p");
     inp = d.node("input");
     inp.type = "submit";
+    inp.className = "ui mini positive button";
     d.push(inp,p);
 
     inp = d.node("input");
     inp.type = "button";
     inp.value = "Cancel";
     inp.onclick = function(){elm = d.find("form");d.clear(elm);}
+    inp.className = "ui mini button";
     d.push(inp,p);
 
     d.push(p,fs);            
     d.push(fs,form);
-    d.push(form, elm);
+    d.push(form, segment);
+    d.push(segment, elm);
   }  
   
   // ***************************
